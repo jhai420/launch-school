@@ -38,26 +38,28 @@ const readline = require('readline-sync');
 const prompt = (message) => console.log(`=>${message}`);
 const displayHand = (hand) => hand.join(', ');
 
-function initializeDeck() {
-  let deck = [2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7, 8, 8, 8, 8, 9, 9, 9, 9, 10, 10, 10, 10, 
-    'Jack', 'Jack', 'Jack', 'Jack', 'Queen', 'Queen', 'Queen', 'Queen', 'King', 'King', 'King', 'King', 'Ace', 'Ace', 'Ace', 'Ace']
+function shuffle(array) {
+  for (let index = array.length - 1; index > 0; index--) {
+    let otherIndex = Math.floor(Math.random() * (index + 1)); // 0 to index
+    [array[index], array[otherIndex]] = [array[otherIndex], array[index]]; // swap elements
+  }
+  return array;
+}
 
-  return deck;
+function initializeDeck() {
+  let deck = [2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 
+    6, 6, 6, 6, 7, 7, 7, 7, 8, 8, 8, 8, 9, 9, 9, 9, 10, 10, 10, 10, 
+    'Jack', 'Jack', 'Jack', 'Jack', 'Queen', 'Queen', 'Queen', 'Queen', 
+    'King', 'King', 'King', 'King', 'Ace', 'Ace', 'Ace', 'Ace']
+
+  return shuffle(deck);
 }
 
 function dealCard(deck) {
 
-  let randomCardIndex = Math.floor(Math.random() * 52);
-
-  while (deck[randomCardIndex] === 0) {
-    randomCardIndex = Math.floor(Math.random() * 52);
-  }
-
-  const card = deck[randomCardIndex];
-  deck[randomCardIndex] = 0;
-
+  const card = deck.shift();
   return card;
-
+  
 }
 
 function calculateHand(hand) {
@@ -153,7 +155,6 @@ function startGame() {
   prompt(`Player's Hand: ${displayHand(PLAYER_HAND)}`);
   playerTotal = calculateHand(PLAYER_HAND);
   prompt(`Card total: ${playerTotal}`);
-  playerTotal === 21 ? prompt('Blackjack!') : null;
 
   DEALER_HAND.push(dealCard(deck), dealCard(deck));
   let hiddenDealerHand = DEALER_HAND.slice()
